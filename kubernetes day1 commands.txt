@@ -1,0 +1,151 @@
+minikube version
+
+minikube status
+
+-- make sure to start docker desktop
+** if there is driver issue
+minikube start --driver=docker
+minikube start --driver=podman
+
+* if there is memory issue
+
+minikube start --memory=memorysize
+minikube start --memory=3072mb
+
+minikube start --driver=docker --memory=3072mb
+
+** error container already exists and can not not allocate memory
+minikube delete   -- current container 
+minikube delete --all  
+minikube delete --all --purge
+minikube start --memory=3072mb
+
+minikube start 
+minikube stop
+minikube pause
+minikube unpause 
+
+
+
+kubectl version
+
+------------------------------
+kubectl get nodes
+kubectl get service
+kubectl get pod/ po
+kubectl get replicaset/rs
+kubeclt get deployment
+kubectl get secret
+
+------- create
+
+kubectl create deployment  deployment-name  --image imagename --replicaset noofreplicas  options
+
+kubectl create deployment  nginx-deploy   --image nginx
+
+
+
+
+PS C:\Users\aayus> kubectl get pod
+NAME                           READY   STATUS    RESTARTS   AGE
+nginx-deploy-8b9dbd8c9-n6srh   1/1     Running   0          81m
+PS C:\Users\aayus> kubectl get pods
+NAME                           READY   STATUS    RESTARTS   AGE
+nginx-deploy-8b9dbd8c9-n6srh   1/1     Running   0          81m
+PS C:\Users\aayus> kubectl edit deployment nginx-deploy
+deployment.apps/nginx-deploy edited
+PS C:\Users\aayus> kubectl get pods
+NAME                            READY   STATUS              RESTARTS   AGE
+nginx-deploy-7cc844cd48-qnzrw   0/1     ContainerCreating   0          14s
+nginx-deploy-8b9dbd8c9-n6srh    1/1     Running             0          85m
+PS C:\Users\aayus> kubectl get pods
+NAME                            READY   STATUS    RESTARTS   AGE
+nginx-deploy-7cc844cd48-qnzrw   1/1     Running   0          89s
+PS C:\Users\aayus> kubectl delete pod nginx-deploy-7cc844cd48-qnzrw
+pod "nginx-deploy-7cc844cd48-qnzrw" deleted from default namespace
+PS C:\Users\aayus> kubectl get pod
+NAME                            READY   STATUS    RESTARTS   AGE
+nginx-deploy-7cc844cd48-mp67q   1/1     Running   0          69s
+PS C:\Users\aayus> kubectl get rs
+NAME                      DESIRED   CURRENT   READY   AGE
+nginx-deploy-7cc844cd48   1         1         1       5m12s
+nginx-deploy-8b9dbd8c9    0         0         0       90m
+PS C:\Users\aayus> kubectl edit deployment nginx-deploy
+deployment.apps/nginx-deploy edited
+PS C:\Users\aayus> kubectl get pod
+NAME                            READY   STATUS    RESTARTS   AGE
+nginx-deploy-7cc844cd48-568sl   1/1     Running   0          9s
+nginx-deploy-7cc844cd48-5g7nz   1/1     Running   0          9s
+nginx-deploy-7cc844cd48-mp67q   1/1     Running   0          2m54s
+PS C:\Users\aayus> kubectl get deployment
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   3/3     3            3           91m
+PS C:\Users\aayus> kubectl get rs
+NAME                      DESIRED   CURRENT   READY   AGE
+nginx-deploy-7cc844cd48   3         3         3       6m33s
+nginx-deploy-8b9dbd8c9    0         0         0       92m
+PS C:\Users\aayus> minikube ssh
+Linux minikube 5.15.167.4-microsoft-standard-WSL2 #1 SMP Tue Nov 5 00:21:55 UTC 2024 x86_64
+
+The programs included with the Debian GNU/Linux system are free software;
+the exact distribution terms for each program are described in the
+individual files in /usr/share/doc/*/copyright.
+
+Debian GNU/Linux comes with ABSOLUTELY NO WARRANTY, to the extent
+permitted by applicable law.
+docker@minikube:~$ exit
+logout
+PS C:\Users\aayus> kubectl get pod -o wide
+NAME                            READY   STATUS    RESTARTS   AGE     IP            NODE       NOMINATED NODE   READINESS GATES
+nginx-deploy-7cc844cd48-568sl   1/1     Running   0          3m5s    10.244.0.60   minikube   <none>           <none>
+nginx-deploy-7cc844cd48-5g7nz   1/1     Running   0          3m5s    10.244.0.59   minikube   <none>           <none>
+nginx-deploy-7cc844cd48-mp67q   1/1     Running   0          5m50s   10.244.0.58   minikube   <none>           <none>
+PS C:\Users\aayus> minikube ssh
+
+kubectl describe pods
+
+kubectl describe pod podname 
+
+kubectl describe pod nginx-deploy-7cc844cd48-568sl
+ 
+start bash session inside pod     
+kubectl exec  -ti podname  -- bash
+
+
+kubectl exec  -ti nginx-deploy-7cc844cd48-568sl  -- bash
+
+
+to get env 
+kubectl exec  nginx-deploy-7cc844cd48-568sl -- env
+
+
+kubectl logs podname
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
