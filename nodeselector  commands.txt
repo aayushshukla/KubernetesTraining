@@ -1,0 +1,30 @@
+Node selector
+
+
+minikube start --nodes 2
+
+
+minikube node add --- to add a node
+
+we label to a node 
+
+  kubectl get nodes
+
+   kubectl label node nodename label=value
+   kubectl label node minikube-m02 disktype=ssd
+
+   disktype=ssd  -- is label
+
+   kubectl get nodes --show-labels
+
+scheduler  --> match label of node 
+
+---> pod runs on the node that match 
+
+kubectl get node -o wide
+
+kubectl get pod -o wide
+
+kubectl label node nodename tagname-
+
+kubectl label node minikube-m02 disktype-

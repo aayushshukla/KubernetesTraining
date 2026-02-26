@@ -1,0 +1,206 @@
+----kubectl get namespace   -- list of namespace
+
+
+default
+kube-public
+kube-system
+kube-node
+
+
+--  kubectl get all -n namespace   -- it will show all resources inside given namespace
+
+    kubectl  get  all -n  default   -- show resource inside default namespace
+
+
+--- kubectl create namespace namespacename   
+kubectl apply -f namespaceyamlfilename.yaml
+
+assign resource to namespace using command
+
+kubectl create deployment  deplyname --image=imagename -n namespacename
+
+to view 
+
+kubectl get pod -n  namespacename
+
+kubectl get pod --all-namespace
+
+delete namespace
+
+kubectl delete namespace namespacename
+kubectl delter -f yamlfilename.yaml
+
+---------- to set default workspace ------
+install kubectx and kubens
+
+kubens namespacename 
+
+S D:\kubernetesworkspace\namespacedemo> kubectl config set-context --current --namespace=mynamespace
+
+
+
+PS D:\kubernetesworkspace\namespacedemo> kubectl apply -f .\mynamespace.yaml
+namespace/mynamespace created
+PS D:\kubernetesworkspace\namespacedemo> kubectl get namespace
+NAME                   STATUS   AGE
+default                Active   11d
+dev                    Active   6d18h
+kube-flannel           Active   4d20h
+kube-node-lease        Active   11d
+kube-public            Active   11d
+kube-system            Active   11d
+kubernetes-dashboard   Active   2d20h
+mynamespace            Active   11s
+testnamespace          Active   3m1s
+PS D:\kubernetesworkspace\namespacedemo> kubectl create deployment nginx-deploy --image=nginx -n testnamespace
+deployment.apps/nginx-deploy created
+PS D:\kubernetesworkspace\namespacedemo> kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   11d
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod
+No resources found in default namespace.
+PS D:\kubernetesworkspace\namespacedemo> kubectl get deployment
+No resources found in default namespace.
+PS D:\kubernetesworkspace\namespacedemo> kubectl get deployment -n default
+No resources found in default namespace.
+PS D:\kubernetesworkspace\namespacedemo> kubectl get deployment -n testnamespace
+NAME           READY   UP-TO-DATE   AVAILABLE   AGE
+nginx-deploy   1/1     1            1           63s
+PS D:\kubernetesworkspace\namespacedemo> kubectl get all -n testnamespace
+NAME                               READY   STATUS    RESTARTS   AGE
+pod/nginx-deploy-8b9dbd8c9-w66xp   1/1     Running   0          78s
+
+NAME                           READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deploy   1/1     1            1           78s
+
+NAME                                     DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deploy-8b9dbd8c9   1         1         1       78s
+PS D:\kubernetesworkspace\namespacedemo>
+PS D:\kubernetesworkspace\namespacedemo>
+PS D:\kubernetesworkspace\namespacedemo> kubectl apply -f .\mynamespacedeploy.yaml
+deployment.apps/nginx-deployment created
+PS D:\kubernetesworkspace\namespacedemo> kubectl get all
+NAME                 TYPE        CLUSTER-IP   EXTERNAL-IP   PORT(S)   AGE
+service/kubernetes   ClusterIP   10.96.0.1    <none>        443/TCP   11d
+PS D:\kubernetesworkspace\namespacedemo> kubectl get all -n mynamespace
+NAME                                    READY   STATUS              RESTARTS   AGE
+pod/nginx-deployment-77bc6bd484-tmlpp   0/1     ContainerCreating   0          21s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   0/1     1            0           21s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-77bc6bd484   1         1         0       21s
+PS D:\kubernetesworkspace\namespacedemo> kubectl get all -n mynamespace
+NAME                                    READY   STATUS              RESTARTS   AGE
+pod/nginx-deployment-77bc6bd484-tmlpp   0/1     ContainerCreating   0          29s
+
+NAME                               READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/nginx-deployment   0/1     1            0           29s
+
+NAME                                          DESIRED   CURRENT   READY   AGE
+replicaset.apps/nginx-deployment-77bc6bd484   1         1         0       29s
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod --all-namespace
+error: unknown flag: --all-namespace
+See 'kubectl get --help' for usage.
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod -- all-namespace
+Error from server (NotFound): pods "all-namespace" not found
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod --all-namespaces
+NAMESPACE              NAME                                         READY   STATUS    RESTARTS       AGE
+kube-flannel           kube-flannel-ds-l7vs7                        1/1     Running   9 (10h ago)    4d20h
+kube-flannel           kube-flannel-ds-xjdzm                        1/1     Running   0              35m
+kube-system            coredns-7d764666f9-bqwn9                     1/1     Running   17 (10h ago)   11d
+kube-system            etcd-minikube                                1/1     Running   17 (10h ago)   11d
+kube-system            kube-apiserver-minikube                      1/1     Running   17 (10h ago)   11d
+kube-system            kube-controller-manager-minikube             1/1     Running   18 (10h ago)   11d
+kube-system            kube-proxy-c2kh4                             1/1     Running   17 (10h ago)   11d
+kube-system            kube-proxy-nb2tb                             1/1     Running   0              35m
+kube-system            kube-scheduler-minikube                      1/1     Running   17 (10h ago)   11d
+kube-system            metrics-server-5778bb4788-zhfjj              1/1     Running   8 (10h ago)    2d20h
+kube-system            storage-provisioner                          1/1     Running   33 (37m ago)   11d
+kubernetes-dashboard   dashboard-metrics-scraper-5565989548-th5bf   1/1     Running   7 (10h ago)    2d20h
+kubernetes-dashboard   kubernetes-dashboard-b84665fb8-xjxpt         1/1     Running   14 (37m ago)   2d20h
+mynamespace            nginx-deployment-77bc6bd484-tmlpp            1/1     Running   0              100s
+testnamespace          nginx-deploy-8b9dbd8c9-w66xp                 1/1     Running   0              5m38s
+PS D:\kubernetesworkspace\namespacedemo>
+
+PS D:\kubernetesworkspace\namespacedemo> kubectl delete -f .\mynamespace.yaml
+namespace "mynamespace" deleted
+PS D:\kubernetesworkspace\namespacedemo> kubectl get namespace
+NAME                   STATUS   AGE
+default                Active   11d
+dev                    Active   6d18h
+kube-flannel           Active   4d20h
+kube-node-lease        Active   11d
+kube-public            Active   11d
+kube-system            Active   11d
+kubernetes-dashboard   Active   2d20h
+testnamespace          Active   13m
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod --all-namespaces
+NAMESPACE              NAME                                         READY   STATUS    RESTARTS       AGE
+kube-flannel           kube-flannel-ds-l7vs7                        1/1     Running   9 (10h ago)    4d20h
+kube-flannel           kube-flannel-ds-xjdzm                        1/1     Running   0              40m
+kube-system            coredns-7d764666f9-bqwn9                     1/1     Running   17 (10h ago)   11d
+kube-system            etcd-minikube                                1/1     Running   17 (10h ago)   11d
+kube-system            kube-apiserver-minikube                      1/1     Running   17 (10h ago)   11d
+kube-system            kube-controller-manager-minikube             1/1     Running   18 (10h ago)   11d
+kube-system            kube-proxy-c2kh4                             1/1     Running   17 (10h ago)   11d
+kube-system            kube-proxy-nb2tb                             1/1     Running   0              40m
+kube-system            kube-scheduler-minikube                      1/1     Running   17 (10h ago)   11d
+kube-system            metrics-server-5778bb4788-zhfjj              1/1     Running   8 (10h ago)    2d20h
+kube-system            storage-provisioner                          1/1     Running   33 (41m ago)   11d
+kubernetes-dashboard   dashboard-metrics-scraper-5565989548-th5bf   1/1     Running   7 (10h ago)    2d20h
+kubernetes-dashboard   kubernetes-dashboard-b84665fb8-xjxpt         1/1     Running   14 (41m ago)   2d20h
+testnamespace          nginx-deploy-8b9dbd8c9-w66xp                 1/1     Running   0              9m46s
+PS D:\kubernetesworkspace\namespacedemo> kubectl delete namespace dev
+namespace "dev" deleted
+PS D:\kubernetesworkspace\namespacedemo> kubectl get namespace
+NAME                   STATUS   AGE
+default                Active   11d
+kube-flannel           Active   4d20h
+kube-node-lease        Active   11d
+kube-public            Active   11d
+kube-system            Active   11d
+kubernetes-dashboard   Active   2d20h
+testnamespace          Active   14m
+PS D:\kubernetesworkspace\namespacedemo>
+
+
+
+
+PS D:\kubernetesworkspace\namespacedemo> kubectx
+minikube
+PS D:\kubernetesworkspace\namespacedemo> kubens
+default
+kube-flannel
+kube-node-lease
+kube-public
+kube-system
+kubernetes-dashboard
+mynamespace
+testnamespace
+PS D:\kubernetesworkspace\namespacedemo> kubens mynamespace
+✔ Active namespace is "mynamespace"
+PS D:\kubernetesworkspace\namespacedemo> kubens
+default
+kube-flannel
+kube-node-lease
+kube-public
+kube-system
+kubernetes-dashboard
+mynamespace
+testnamespace
+PS D:\kubernetesworkspace\namespacedemo> kubectl create deployment nginx-deploy --image=nginx
+deployment.apps/nginx-deploy created
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod
+NAME                           READY   STATUS    RESTARTS   AGE
+nginx-deploy-8b9dbd8c9-hx99m   1/1     Running   0          8s
+PS D:\kubernetesworkspace\namespacedemo> kubens default
+✔ Active namespace is "default"
+PS D:\kubernetesworkspace\namespacedemo> kubectl get pod
+No resources found in default namespace.
+PS D:\kubernetesworkspace\namespacedemo>
+
+
+
+
