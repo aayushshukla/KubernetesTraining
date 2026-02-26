@@ -1,0 +1,21 @@
+apiVersion: apps/v1 # specifies api group and version used to create deployment
+kind: Deployment #  defines type of k8 resource
+metadata: # metadata contains indentifying information
+  name: nginx-deploy1 # unique name of deployment within the namespace
+  labels: # key value pair for identification
+    app: nginx-app # label assigned to deployment
+spec: # specification of deployment
+  replicas: 2 # no of replicaset
+  selector: # how deployment will find the pods
+    matchLabels: # select pod that matches the label
+      app: nginx-app
+  template: #blueprint for creating pod
+    metadata:
+      labels: # label applied on pod by this deployment
+        app: nginx-app # must match with selector.matchlabels
+    spec: # pod specification
+      containers: # list of container inside the pod
+        - name: mynginxcontainer # name of the container
+          image: nginx # image of container
+          ports:
+            - containerPort: 80 # container port no  -- port exposed for container

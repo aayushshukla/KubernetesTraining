@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: nodeport-service
+
+spec:
+  type: NodePort # type of service .By default it is cluster ip  .  NodePort | ClusterIp | LoadBalancer
+  selector:
+    app: nginx-app
+  ports:
+    - port: 80
+      targetPort: 80 # it is the port of the container
+      nodePort: 30001 # port opened in node to access service
+
+
+# http:// localhost:30001/
+# http:// 192.168.49.2:300001/

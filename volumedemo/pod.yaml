@@ -1,0 +1,21 @@
+# metadata
+# spec
+#status
+apiVersion: v1
+kind: Pod
+metadata:
+  name: task-pv-pod
+
+spec:
+  volumes:
+    - name: task-pv-storage
+      persistentVolumeClaim:
+        claimName: task-pv-claim
+  containers:
+    - image: nginx
+      name: task-pv-container
+      ports:
+        - containerPort: 8080
+      volumeMounts:
+        - name: task-pv-storage
+          mountPath: "usr/share/nginx/html"

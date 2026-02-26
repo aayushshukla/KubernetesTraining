@@ -1,0 +1,15 @@
+# metadata
+# spec
+#status
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-ssd
+spec:
+  containers:
+    - image: nginx
+      name: nginx-container
+      ports:
+        - containerPort: 8080
+  nodeSelector:
+    disktype: ssd # it should same as node tag

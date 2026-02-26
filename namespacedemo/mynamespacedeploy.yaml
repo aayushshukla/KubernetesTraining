@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: mynamespace
+  labels:
+    app: nginx
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx
+  template:
+    metadata:
+      labels:
+        app: nginx
+    spec:
+      containers:
+        - name: nginx
+          image: nginx:1.14.2
+          ports:
+            - containerPort: 80
+
+#  create a dev namespace      kubectl create namespace dev
+# deploy redis in dev namespace   kubectl create deployment redis-deploy --image=redis -n dev
+# show  all namespaces               kubectl get namespace
+# show pod running in devnamespace   kubectl get pod -n dev
+# show all pods running in all namespace   kubectl get --all-namespace
+# delete dev namespace                     kubectl delete namespace dev
+
+# wsl --version
+

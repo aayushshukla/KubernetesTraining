@@ -1,0 +1,21 @@
+# metadata
+# spec
+#status
+apiVersion: v1
+kind: Pod
+metadata:
+  name: redis-pod
+  labels:
+    app: redis
+spec:
+  containers:
+    - image: redis
+      name: redis-container
+      ports:
+        - containerPort: 8080
+      volumeMounts:
+        - name: redis-storage # volume reference
+          mountPath: /data/redis # path inside container will store persistent data
+  volumes: # volume defination
+    - name: redis-storage
+      emptyDir: {} # path created inside minikube node
